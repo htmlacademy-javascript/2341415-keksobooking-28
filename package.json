@@ -2,6 +2,7 @@
   "name": "keksobooking",
   "version": "28.0.0",
   "private": true,
+  "type": "module",
   "description": "Личный проект «Кексобукинг» от HTML Academy",
   "repository": {
     "type": "git",
