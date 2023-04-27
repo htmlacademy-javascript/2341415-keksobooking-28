@@ -1,4 +1,4 @@
-const types = {
+const TYPES = {
   flat: 'Квартира',
   bungalow: 'Бунгало',
   house: 'Дом',
@@ -53,7 +53,7 @@ const createCard = ({offer, author}) => {
   popupTitle.textContent = offer.title;
   popupAddress.textContent = `${offer.address.lat} с.ш. ${offer.address.lng} в.д.`;
   popupPrice.textContent = `${offer.price} ₽/ночь`;
-  popupType.textContent = types[offer.type];
+  popupType.textContent = TYPES[offer.type];
   popupCapacity.textContent = `${offer.rooms} комнат для ${offer.guests} гостей`;
   popupTimeCheckInOff.textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
 
