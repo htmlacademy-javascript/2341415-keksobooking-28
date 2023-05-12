@@ -69,7 +69,7 @@ capacityGuestsField.addEventListener('change', validateOnEvent);
 
 const priceElement = form.querySelector('[name="price"]');
 
-const minPricePerNightForTypeOfAccomodation = {
+const minPricePerNight = {
   'bungalow': 0,
   'flat': 1000,
   'hotel': 3000,
@@ -80,8 +80,10 @@ const minPricePerNightForTypeOfAccomodation = {
 const type = form.querySelector('[name="type"]');
 
 type.addEventListener('change', (evt) => {
-  const minPrice = minPricePerNightForTypeOfAccomodation[evt.target.value];
+  evt.preventDefault();
+  const minPrice = minPricePerNight[evt.target.value];
   changePricePerNight(minPrice);
+  // pristine.validate();
 
   return evt.target.value;
 });
@@ -97,6 +99,7 @@ function changePricePerNight(minPrice) {
   );
 }
 
+
 const checkIn = form.querySelector('[name="timein"]');
 const checkOut = form.querySelector('[name="timeout"]');
 
@@ -104,16 +107,16 @@ checkIn.addEventListener('change', (evt) => {
   evt.preventDefault();
   const checkInTime = evt.target.value;
   checkOut.value = checkInTime;
-  pristine.validate();
+  // pristine.validate();
 });
 
 checkOut.addEventListener('change', (evt) => {
   evt.preventDefault();
   const checkOutTime = evt.target.value;
   checkIn.value = checkOutTime;
-  pristine.validate();
+  // pristine.validate();
 });
 
 form.addEventListener('submit', validateOnEvent);
 
-pristine.validate();
+// pristine.validate();

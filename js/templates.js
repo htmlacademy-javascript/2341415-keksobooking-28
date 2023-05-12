@@ -29,48 +29,49 @@ const createFeatureFragment = (features) => {
 
 const createCard = ({offer, author}) => {
   const card = cardTemplate.cloneNode(true);
-  const popupTitle = card.querySelector('.popup__title');
-  const popupAddress = card.querySelector('.popup__text--address');
-  const popupPrice = card.querySelector('.popup__text--price');
-  const popupType = card.querySelector('.popup__type');
-  const popupCapacity = card.querySelector('.popup__text--capacity');
-  const popupTimeCheckInOff = card.querySelector('.popup__text--time');
-  const popupDescription = card.querySelector('.popup__description');
-  const popupFeatures = card.querySelector('.popup__features');
-  const popupPhotos = card.querySelector('.popup__photos');
-  const popupAvatar = card.querySelector('.popup__avatar');
-  popupFeatures.innerHTML = '';
+  const title = card.querySelector('.popup__title');
+  const address = card.querySelector('.popup__text--address');
+  const price = card.querySelector('.popup__text--price');
+  const type = card.querySelector('.popup__type');
+  const capacity = card.querySelector('.popup__text--capacity');
+  const timeCheckInOff = card.querySelector('.popup__text--time');
+  const description = card.querySelector('.popup__description');
+  const photos = card.querySelector('.popup__photos');
+  const avatar = card.querySelector('.popup__avatar');
+  const features = card.querySelector('.popup__features');
+  features.innerHTML = '';
   const featureFragment = createFeatureFragment(offer.features);
-  popupFeatures.append(featureFragment);
+  features.append(featureFragment);
   const photo = card.querySelector('.popup__photo');
   offer.photos.forEach((it) => {
     const photoClone = photo.cloneNode();
     photoClone.src = it;
-    popupPhotos.append(photoClone);
+    photos.append(photoClone);
   });
-  popupPhotos.removeChild(popupPhotos.firstElementChild);
+  photos.removeChild(photos.firstElementChild);
 
-  popupTitle.textContent = offer.title;
-  popupAddress.textContent = `${offer.address.lat} с.ш. ${offer.address.lng} в.д.`;
-  popupPrice.textContent = `${offer.price} ₽/ночь`;
-  popupType.textContent = TYPES[offer.type];
-  popupCapacity.textContent = `${offer.rooms} комнат для ${offer.guests} гостей`;
-  popupTimeCheckInOff.textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
+  title.textContent = offer.title;
+  address.textContent = `${offer.address.lat} с.ш. ${offer.address.lng} в.д.`;
+  price.textContent = `${offer.price} ₽/ночь`;
+  type.textContent = TYPES[offer.type];
+  capacity.textContent = `${offer.rooms} комнат для ${offer.guests} гостей`;
+  timeCheckInOff.textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
 
   if(offer.description === '') {
-    popupDescription.classList.add('hidden');
-  } popupDescription.textContent = offer.description;
-  popupAvatar.src = author.avatar;
+    description.classList.add('hidden');
+  } description.textContent = offer.description;
+  avatar.src = author.avatar;
 
   return card;
 };
 
-const renderCards = (cards, container = cardList) => {
-  const fragment = document.createDocumentFragment();
-  const card = cards[0];
-  const cardElement = createCard(card);
-  fragment.append(cardElement);
-  container.appendChild(fragment);
-};
+// const renderCards = (cards, container = cardList) => {
+//   const fragment = document.createDocumentFragment();
+//   const card = cards[0];
+//   const cardElement = createCard(card);
+//   fragment.append(cardElement);
+//   container.appendChild(fragment);
+// };
 
-export { renderCards };
+// export { renderCards };
+export { TYPES, createFeatureFragment };

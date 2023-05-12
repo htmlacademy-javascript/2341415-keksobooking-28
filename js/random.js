@@ -26,7 +26,7 @@ const FEATURES = [
   'parking',
   'washer',
   'elevator',
-  'conditioner'
+  'conditioner',
 ];
 
 const DESCRIPTIONS = [
@@ -39,7 +39,7 @@ const DESCRIPTIONS = [
   'Из небольшого, но честного минуса: апартаменты находятся на первом этаже.',
   'На автобусе/троллейбусе можно добраться почти до любого места в центре.',
   'Яркий, необычный апартамент в пентхаусе на 38-м этаже небоскреба.',
-  'В апартаментах качественный ремонт, есть все необходимое для комфортного проживания.'
+  'В апартаментах качественный ремонт, есть все необходимое для комфортного проживания.',
 ];
 
 
@@ -75,8 +75,8 @@ const getRandomArrayElement = (arr) => arr[generateIntBetween(0, arr.length - 1)
 const generateFloatBetween = (a, b) => a + Math.random() * (a - b);
 
 const generateLocation = () => ({
-  lat: generateFloatBetween(35.65000, 35.70000).toString().slice(0,8),
-  lng: generateFloatBetween(139.70000, 139.80000).toString().slice(0,9),
+  lat: generateFloatBetween(35.65000, 35.70000).toFixed(5),
+  lng: generateFloatBetween(139.70000, 139.80000).toFixed(5),
 });
 
 const getRndInteger = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -125,6 +125,6 @@ const generateOfferDescription = (offer = generateOffer()) => ({
   author: generateAuthor(positiveIntToString(generateIntBetween(1,10)))
 });
 
-export { generateOfferDescription, generateOffer };
+export { generateOfferDescription, generateOffer, getRandomUniqItems };
 
 
