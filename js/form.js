@@ -5,23 +5,23 @@ const fieldsetMap = mapFilters.querySelectorAll('fieldset');
 const selectMap = mapFilters.querySelectorAll('select');
 
 const inactivateForm = () => {
-
   form.classList.add('ad-form--disabled');
   mapFilters.classList.add('map__filters--disabled');
 
   fieldsetForm.forEach((it) => it.setAttribute('disabled', 'disabled'));
   fieldsetMap.forEach((it) => it.setAttribute('disabled', 'disabled'));
   selectMap.forEach((it) => it.setAttribute('disabled', 'disabled'));
-
 };
 
 const activateForm = () => {
   form.classList.remove('ad-form--disabled');
-  mapFilters.classList.remove('map__filters--disabled');
-
   fieldsetForm.forEach((it) => it.removeAttribute('disabled'));
+};
+
+const activateFilters = () => {
+  mapFilters.classList.remove('map__filters--disabled');
   fieldsetMap.forEach((it) => it.removeAttribute('disabled'));
   selectMap.forEach((it) => it.removeAttribute('disabled'));
 };
 
-export { inactivateForm, activateForm};
+export { inactivateForm, activateForm, activateFilters };

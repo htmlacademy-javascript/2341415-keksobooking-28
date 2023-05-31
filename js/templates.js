@@ -40,8 +40,12 @@ const createCard = ({offer, author}) => {
   const avatar = card.querySelector('.popup__avatar');
   const features = card.querySelector('.popup__features');
   features.innerHTML = '';
-  const featureFragment = createFeatureFragment(offer.features);
-  features.append(featureFragment);
+
+  if (!offer.features) {
+    const featureFragment = createFeatureFragment(offer.features);
+    features.append(featureFragment);
+  }
+
   const photo = card.querySelector('.popup__photo');
   offer.photos.forEach((it) => {
     const photoClone = photo.cloneNode();
