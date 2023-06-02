@@ -12,7 +12,7 @@ class MyPrestine extends Pristine {
   }
 }
 
-const initForm = (mapContoller) => {
+const initForm = (mapContoller, onResetFns) => {
   const form = document.querySelector('.ad-form');
   const capacityGuestsField = form.querySelector('[name="capacity"]');
   const roomNumberField = form.querySelector('[name="rooms"]');
@@ -129,10 +129,10 @@ const initForm = (mapContoller) => {
     mapContoller.reset();
     form.reset();
     mapFilters.reset();
-    console.log('addressField.value:', addressField.value)
     addressField.value = `lat: ${startCoordinate.lat.toFixed(5)}, lng: ${startCoordinate.lng.toFixed(5)}`;
-    console.log('addressField.value:', addressField.value)
   });
+
+  onResetFns.forEach((fn) => resetButton.addEventListener('click', fn));
 
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -161,10 +161,8 @@ const initForm = (mapContoller) => {
               mapFilters.reset();
               mapContoller.reset();
               addressField.value = `lat: ${startCoordinate.lat.toFixed(5)}, lng: ${startCoordinate.lng.toFixed(5)}`;
-              console.log('addressField.value:', addressField.value)
 
               const message = document.querySelector('.success');
-              console.log('message:', message)
 
               if (message) {
                 message.classList.remove('hidden');
@@ -186,14 +184,14 @@ const initForm = (mapContoller) => {
         )
         .catch(
           (err) => {
-            console.log('err:', err)
+            // console.log('err:', err)
 
             const message = document.querySelector('.error');
             const errorMessage = message ?? createErrorMessage();
 
             if (errorMessage) {
               errorMessage.classList.remove('hidden');
-              console.log('errorMessage:', errorMessage)
+              // console.log('errorMessage:', errorMessage)
             }
 
             document.addEventListener('keydown', (evt) => {
@@ -211,7 +209,6 @@ const initForm = (mapContoller) => {
         );
 
       publicationButton.disabled = true;
-      console.log('publicationButton:', publicationButton)
 
     }
 

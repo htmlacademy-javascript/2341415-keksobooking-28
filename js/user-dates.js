@@ -6,6 +6,7 @@ const createLoader = (onSuccess, onError) => () => fetch(
   },
 )
   .then((response) => {
+    console.log('response:', response)
     // throw new Error('error!!!!');
     if (response.ok) {
       return response.json();

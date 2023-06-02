@@ -23,8 +23,9 @@ const clonePopup = () => {
   return balloonTemplate.cloneNode(true);
 };
 
-const setAddres = (popupElement, { lat, lng }) => {
-  popupElement.querySelector('.popup__text--address').textContent = `Координаты: ${lat}, ${lng}`;
+const setAddres = (popupElement, address) => {
+  popupElement.querySelector('.popup__text--address').textContent = address;
+
 };
 
 const setPrice = (popupElement, price, postfix = '₽/ночь') => {
@@ -115,37 +116,32 @@ const createPopup = (offer, author) => {
 
 const createMarker = (location, icon) => L.marker(L.latLng(location), { icon });
 
-const createMarkerFactory = (map) => {
-  const markerGroup = L.layerGroup().addTo(map);
+const pinIcon = L.icon({
+  iconUrl:'./img/pin.svg',
+  iconSize: [52, 52],
+  iconAnchor: [26, 52],
+});
 
-  const pinIcon = L.icon({
-    iconUrl:'./img/pin.svg',
-    iconSize: [52, 52],
-    iconAnchor: [26, 52],
-  });
+const form = document.querySelector('.ad-form');
 
-  const form = document.querySelector('.ad-form');
+const createMarkerOf = (offerCard) => {
+  const { location, offer, author } = offerCard;
 
-  return ({ location, offer, author }) => {
-    const marker = createMarker(location, pinIcon);
-    const popupEl = createPopup(offer, author);
+  const marker = createMarker(location, pinIcon);
+  const popupEl = createPopup(offer, author);
 
-    marker
-      .addTo(markerGroup)
-      .bindPopup(popupEl);
+  marker.bindPopup(popupEl);
 
-    form.addEventListener('submit', () => {
+  form.addEventListener(
+    'submit',
+    () => {
       marker.closePopup();
-    });
-  };
-};
+    }
+  );
 
-const createMarkerAdder = (map) => {
-  const addMarker = createMarkerFactory(map);
-
-  return (offerCards) => offerCards.forEach(addMarker);
+  return marker;
 };
 
 export {
-  createMarkerAdder
+  createMarkerOf
 };

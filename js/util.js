@@ -14,4 +14,12 @@ const unique = (arr) => {
 
 const createArray = (length, fn) => Array.from({ length }, fn);
 
-export { positiveIntToString, unique, createArray };
+const debounce = (callback, timeoutDelay) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+export { positiveIntToString, unique, createArray, debounce };
