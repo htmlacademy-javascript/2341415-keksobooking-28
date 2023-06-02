@@ -3,28 +3,52 @@ import { inactivateForm, activateFilters } from './form.js';
 import {createLoader} from './user-dates.js';
 import { initForm } from './user-form.js';
 import { createMapController, startCoordinate, ZOOM } from './map.js';
-import { createMarkerAdder } from './markers.js';
+import { createMarkerOf } from './markers.js';
 import { showErrorPopup } from './server-error-popup.js';
 import './form-success-popup.js';
 import './form-error-popup.js';
-
+import './map.js';
+import './slider.js';
+import { createStore } from './store.js';
+import { debounce } from './util.js';
+import { RERENDER_DELAY } from './config.js';
 
 inactivateForm();
+
 const mapController = createMapController(startCoordinate, ZOOM);
-initForm(mapController);
 
 const handleOfferCards = (offerCards) => {
-  const addMarkers = createMarkerAdder(mapController.map);
-  addMarkers(offerCards);
+  const logFilteredCards = (filteredCards) => {
+    // console.log(filteredCards);
+  };
+
+  const updateOfferCardsMarkers = (filteredCards) => {
+    mapController.clearMarkers();
+    const markers = filteredCards.map((card) => createMarkerOf(card));
+    mapController.addMarkers(markers);
+  };
+
+  const store = createStore(
+    offerCards,
+    [
+      logFilteredCards,
+      debounce(updateOfferCardsMarkers, RERENDER_DELAY),
+    ]
+  );
+
+  initForm(
+    mapController,
+    [
+      () => store.update(),
+    ]
+  );
+  store.process();
   activateFilters();
 };
 
-const renderOfferCards = createLoader(
+const appStart = createLoader(
   handleOfferCards,
   () => showErrorPopup('ошибка загрузки данных', 5000)
 );
 
-renderOfferCards();
-
-import './map.js';
-import './slider.js';
+appStart();

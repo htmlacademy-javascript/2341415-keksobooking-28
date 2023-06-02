@@ -35,8 +35,6 @@ const createMainPinMarker = () => {
   return marker;
 };
 
-const mainPinMarker = createMainPinMarker();
-
 const setAddresToStartCoordinate = () => {
   addressField.value = getLatLangStr(startCoordinate);
 };
@@ -69,16 +67,25 @@ function createMap(aMainPinMarker) {
 const createMapController = (aStartCoordinate, aZOOM) => {
   const mainMarker = createMainPinMarker();
   const map = createMap(mainMarker);
+  const markerGroup = L.layerGroup().addTo(map);
 
   const resetMap = () => map.setView(aStartCoordinate, aZOOM);
+
   const resetMainPinMarkerCoordinates = () => mainMarker.setLatLng(aStartCoordinate);
+
+  const clearMarkers = () => markerGroup.clearLayers();
+
+  const addMarkers = (markers) => {
+    markers.forEach((marker) => marker.addTo(markerGroup));
+  };
 
   const reset = () => {
     resetMap();
     resetMainPinMarkerCoordinates();
+    clearMarkers();
   };
 
-  return { map, reset };
+  return { addMarkers, reset, clearMarkers };
 };
 
 export { createMapController, startCoordinate, ZOOM };
