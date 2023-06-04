@@ -1,19 +1,5 @@
 import { CARDS_COUNT } from './config.js';
-
-const filtersFormEl = document.querySelector('.map__filters');
-
-const getFilters = () => {
-  const formData = new FormData(filtersFormEl);
-
-  return {
-    type: formData.get('housing-type'),
-    price: formData.get('housing-price'),
-    guestsCount: formData.get('housing-guests'),
-    roomsCount: formData.get('housing-rooms'),
-    features: formData.getAll('features'),
-  };
-};
-
+import { getFilters, onFiltersChange } from './filters.js';
 
 const getTypePredicate = (type) => (card) => card.offer.type === type;
 const getGuestsPredicate = (guestsCount) => (card) => card.offer.guests.toString() === guestsCount;
@@ -74,21 +60,18 @@ const filterCards = (offerCards) => {
  * @param onUpdateFns - array of functions, interface (filteredCards) => {...}
  */
 const createStore = (offerCards, onUpdateFns) => {
-
   let filteredCards = filterCards(offerCards);
 
-  const process = () => {
-    onUpdateFns.forEach((fn) => fn(filteredCards));
-  };
+  const notify = () => onUpdateFns.forEach((fn) => fn(filteredCards));
 
   const update = () => {
     filteredCards = filterCards(offerCards);
-    process();
+    notify();
   };
 
-  filtersFormEl.addEventListener('change', update);
+  onFiltersChange(update);
 
-  return { process, update };
+  return { notify, update };
 };
 
 export { filterCards, createStore };

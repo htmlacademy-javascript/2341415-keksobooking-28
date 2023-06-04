@@ -12,15 +12,18 @@ import './slider.js';
 import { createStore } from './store.js';
 import { debounce } from './util.js';
 import { RERENDER_DELAY } from './config.js';
+import './avatar.js';
+import './user-photo.js';
+import { resetFilters } from './filters.js';
 
 inactivateForm();
 
 const mapController = createMapController(startCoordinate, ZOOM);
 
 const handleOfferCards = (offerCards) => {
-  const logFilteredCards = (filteredCards) => {
-    // console.log(filteredCards);
-  };
+  // const logFilteredCards = (filteredCards) => {
+  //   console.log(filteredCards);
+  // };
 
   const updateOfferCardsMarkers = (filteredCards) => {
     mapController.clearMarkers();
@@ -31,7 +34,7 @@ const handleOfferCards = (offerCards) => {
   const store = createStore(
     offerCards,
     [
-      logFilteredCards,
+      // logFilteredCards,
       debounce(updateOfferCardsMarkers, RERENDER_DELAY),
     ]
   );
@@ -39,11 +42,19 @@ const handleOfferCards = (offerCards) => {
   initForm(
     mapController,
     [
-      () => store.update(),
-    ]
+      resetFilters,
+      () => store.update()
+    ],
+    [
+      resetFilters,
+      () => store.update()
+    ],
   );
-  store.process();
+
+  store.notify();
   activateFilters();
+
+  return updateOfferCardsMarkers;
 };
 
 const appStart = createLoader(
@@ -52,3 +63,5 @@ const appStart = createLoader(
 );
 
 appStart();
+
+export { handleOfferCards };

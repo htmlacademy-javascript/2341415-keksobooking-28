@@ -2,11 +2,10 @@ const createLoader = (onSuccess, onError) => () => fetch(
   'https://28.javascript.pages.academy/keksobooking/data',
   {
     method: 'GET',
-    // credentials: 'same-origin',
+    credentials: 'same-origin',
   },
 )
   .then((response) => {
-    console.log('response:', response)
     // throw new Error('error!!!!');
     if (response.ok) {
       return response.json();
