@@ -1,13 +1,8 @@
 import { activateForm } from './form.js';
+import { ZOOM, MAIN_PIN_MARKER_START_POSITION } from './config.js';
 
 const addressField = document.querySelector('#address');
-
-const startCoordinate = L.latLng({
-  lat: 35.68950,
-  lng: 139.69200,
-});
-
-const ZOOM = 10;
+const startCoordinate = L.latLng(MAIN_PIN_MARKER_START_POSITION);
 
 const getLatLangStr = ({ lat, lng }) => `lat: ${lat.toFixed(5)}, lng: ${lng.toFixed(5)}`;
 
@@ -52,7 +47,7 @@ const initMap = () => L.map('map-canvas')
   .on('load', () => activateForm())
   .setView(startCoordinate, ZOOM);
 
-function createMap(aMainPinMarker) {
+const createMap = (aMainPinMarker) => {
 
   const theMap = initMap();
   const titleLayer = createTitleLayer();
@@ -62,16 +57,16 @@ function createMap(aMainPinMarker) {
   aMainPinMarker.addTo(theMap);
 
   return theMap;
-}
+};
 
-const createMapController = (aStartCoordinate, aZOOM) => {
+const createMapController = () => {
   const mainMarker = createMainPinMarker();
   const map = createMap(mainMarker);
   const markerGroup = L.layerGroup().addTo(map);
 
-  const resetMap = () => map.setView(aStartCoordinate, aZOOM);
+  const resetMap = () => map.setView(startCoordinate, ZOOM);
 
-  const resetMainPinMarkerCoordinates = () => mainMarker.setLatLng(aStartCoordinate);
+  const resetMainPinMarkerCoordinates = () => mainMarker.setLatLng(startCoordinate);
 
   const clearMarkers = () => markerGroup.clearLayers();
 

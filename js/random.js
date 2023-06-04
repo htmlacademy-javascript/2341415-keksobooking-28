@@ -1,4 +1,4 @@
-import { positiveIntToString, unique } from './util.js';
+import { positiveIntToString, getUnique } from './util.js';
 
 const TYPES = [
   'palace',
@@ -82,7 +82,7 @@ const generateLocation = () => ({
 const getRndInteger = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
 const getRandomUniqItems = (list, aCount) => {
-  const uniqList = unique(list);
+  const uniqList = getUnique(list);
   const count = aCount ?? getRndInteger(1, uniqList.length);
 
   if (uniqList.length < count) {

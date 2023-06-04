@@ -1,24 +1,18 @@
-import { CARDS_COUNT } from './config.js';
+import { CARDS_COUNT, PRICE, ANY, PRICE_FILTER } from './config.js';
 import { getFilters, onFiltersChange } from './filters.js';
 
 const getTypePredicate = (type) => (card) => card.offer.type === type;
 const getGuestsPredicate = (guestsCount) => (card) => card.offer.guests.toString() === guestsCount;
 const getPricePredicate = (price) => (card) => {
-  let priceStr = '';
-  if(card.offer.price >= 10000 && card.offer.price <= 50000) {
-    priceStr = 'middle';
-    return priceStr === price;
+  if(price === PRICE_FILTER.LOW) {
+    return card.offer.price <= PRICE.LOW;
   }
 
-  if(card.offer.price < 10000) {
-    priceStr = 'low';
-    return priceStr === price;
+  if(price === PRICE_FILTER.HIGH) {
+    return card.offer.price > PRICE.HIGH;
   }
 
-  if(card.offer.price > 50000) {
-    priceStr = 'high';
-    return priceStr === price;
-  }
+  return card.offer.price > PRICE.LOW && card.offer.price < PRICE.HIGH;
 };
 
 const getFeaturesPredicate = (features) => (card) => card.offer.features
@@ -32,23 +26,23 @@ const filterCards = (offerCards) => {
 
   const { type, price, guestsCount, roomsCount, features } = getFilters();
 
-  if (type && type !== 'any') {
+  if (type && type !== ANY) {
     filtered = filtered.filter(getTypePredicate(type));
   }
 
-  if (guestsCount && guestsCount !== 'any') {
+  if (guestsCount && guestsCount !== ANY) {
     filtered = filtered.filter(getGuestsPredicate(guestsCount));
   }
 
-  if (price && price !== 'any') {
+  if (price && price !== ANY) {
     filtered = filtered.filter(getPricePredicate(price));
   }
 
-  if (roomsCount && roomsCount !== 'any') {
+  if (roomsCount && roomsCount !== ANY) {
     filtered = filtered.filter(getRoomsPredicate(roomsCount));
   }
 
-  if (features && features !== '') {
+  if (features) {
     filtered = filtered.filter(getFeaturesPredicate(features));
   }
 
