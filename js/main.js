@@ -2,7 +2,7 @@
 import { inactivateForm, activateFilters } from './form.js';
 import {createLoader} from './user-dates.js';
 import { initForm } from './user-form.js';
-import { createMapController, startCoordinate, ZOOM } from './map.js';
+import { createMapController } from './map.js';
 import { createMarkerOf } from './markers.js';
 import { showErrorPopup } from './server-error-popup.js';
 import './form-success-popup.js';
@@ -18,13 +18,9 @@ import { resetFilters } from './filters.js';
 
 inactivateForm();
 
-const mapController = createMapController(startCoordinate, ZOOM);
+const mapController = createMapController();
 
 const handleOfferCards = (offerCards) => {
-  // const logFilteredCards = (filteredCards) => {
-  //   console.log(filteredCards);
-  // };
-
   const updateOfferCardsMarkers = (filteredCards) => {
     mapController.clearMarkers();
     const markers = filteredCards.map((card) => createMarkerOf(card));
@@ -34,7 +30,6 @@ const handleOfferCards = (offerCards) => {
   const store = createStore(
     offerCards,
     [
-      // logFilteredCards,
       debounce(updateOfferCardsMarkers, RERENDER_DELAY),
     ]
   );

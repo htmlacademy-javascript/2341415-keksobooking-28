@@ -1,15 +1,12 @@
 import { createSuccessMessage } from './form-success-popup.js';
 import { createErrorMessage } from './form-error-popup.js';
-import { startCoordinate } from './map.js';
-import { MIN_PRICE_PER_NIGHT } from './config.js';
+import { MIN_PRICE_PER_NIGHT, NOT_FOR_GUESTS_ROOM_NUMBER } from './config.js';
 import { hide, show, disable, enable } from './util.js';
-import { handleOfferCards } from './main.js';
 
 const form = document.querySelector('.ad-form');
 const capacityGuestsField = form.querySelector('[name="capacity"]');
 const roomNumberField = form.querySelector('[name="rooms"]');
 const publicationButton = document.querySelector('.ad-form__submit');
-const addressField = document.querySelector('#address');
 const priceElement = form.querySelector('[name="price"]');
 const type = form.querySelector('[name="type"]');
 const checkIn = form.querySelector('[name="timein"]');
@@ -31,10 +28,10 @@ class MyPrestine extends Pristine {
 const createValidator = () => {
   const isCapacityAndRoomNumberСorrespond = (capacity, roomNumber) => {
     if (capacity === 0) {
-      return roomNumber === 100;
+      return roomNumber === NOT_FOR_GUESTS_ROOM_NUMBER;
     }
 
-    if (roomNumber === 100) {
+    if (roomNumber === NOT_FOR_GUESTS_ROOM_NUMBER) {
       return capacity === 0;
     }
 
@@ -96,15 +93,25 @@ const getSuccessMessage = () => {
   return message ?? createSuccessMessage();
 };
 
-const onEscapeKeyDown = (fn) => {
-  document.addEventListener('keydown', (evt) => {
+const addEscapeKeyDownOnlyOneslistener = (fn) => {
+  const listen = (evt) => {
     if (evt.key === 'Escape') {
       fn(evt);
+      document.removeEventListener('keydown', listen);
     }
-  });
+  };
+
+  document.addEventListener('keydown', listen);
 };
 
-const onAnyClick = (fn) => document.addEventListener('click', fn);
+const addAnyClickOnlyOnesListener = (fn) => {
+  const listener = (evt) => {
+    fn(evt);
+    document.removeEventListener('click', listener);
+  };
+
+  document.addEventListener('click', listener);
+};
 
 const clearImage = (el) => {
   el.src = 'img/muffin-grey.svg';
@@ -118,10 +125,10 @@ const getErrorMessage = () => {
 const onForSendingError = () => {
   const errorMessage = getErrorMessage();
   show(errorMessage);
-  onEscapeKeyDown(() => hide(errorMessage));
-  onEscapeKeyDown(() => enable(publicationButton));
-  onAnyClick(() => hide(errorMessage));
-  onAnyClick(() => enable(publicationButton));
+  addEscapeKeyDownOnlyOneslistener(() => hide(errorMessage));
+  addEscapeKeyDownOnlyOneslistener(() => enable(publicationButton));
+  addAnyClickOnlyOnesListener(() => hide(errorMessage));
+  addAnyClickOnlyOnesListener(() => enable(publicationButton));
   disable(publicationButton);
 };
 
@@ -130,14 +137,10 @@ const sendForm = (formData, onSuccess, onError) =>
     'https://28.javascript.pages.academy/keksobooking',
     {
       method: 'POST',
-      body: formData,
-      // headers: {
-      //   'Content-Type': 'multipart/form-data',
-      // },
+      body: formData
     },
   ).then(
     (res) => {
-      // throw new Error('meow');
       if (res.ok) {
         onSuccess();
       }
@@ -147,15 +150,7 @@ const sendForm = (formData, onSuccess, onError) =>
 const initForm = (mapContoller, onResetFns, onSubmitFns) => {
   const pristine = createValidator();
 
-  type.addEventListener('change', (evt) => {
-    evt.preventDefault();
-    const minPrice = MIN_PRICE_PER_NIGHT[evt.target.value];
-    changePricePerNight(minPrice);
-
-    return evt.target.value;
-  });
-
-  function changePricePerNight(minPrice) {
+  const changePricePerNight = (minPrice) => {
     priceElement.placeholder = minPrice;
     pristine.removeValidators(priceElement);
 
@@ -164,7 +159,15 @@ const initForm = (mapContoller, onResetFns, onSubmitFns) => {
       (value) => +value >= minPrice,
       `Минимальная цена: ${minPrice}`
     );
-  }
+  };
+
+  type.addEventListener('change', (evt) => {
+    evt.preventDefault();
+    const minPrice = MIN_PRICE_PER_NIGHT[evt.target.value];
+    changePricePerNight(minPrice);
+
+    return evt.target.value;
+  });
 
   checkIn.addEventListener('change', (evt) => {
     evt.preventDefault();
@@ -182,10 +185,8 @@ const initForm = (mapContoller, onResetFns, onSubmitFns) => {
     evt.preventDefault();
     mapContoller.reset();
     form.reset();
-    addressField.value = `lat: ${startCoordinate.lat.toFixed(5)}, lng: ${startCoordinate.lng.toFixed(5)}`;
     clearImage(previewAvatar);
     clearImage(previewUserPhoto);
-    handleOfferCards();
   });
 
   onResetFns.forEach((fn) => resetButton.addEventListener('click', fn));
@@ -193,13 +194,12 @@ const initForm = (mapContoller, onResetFns, onSubmitFns) => {
   const onSuccessfullFormSending = () => {
     form.reset();
     mapContoller.reset();
-    addressField.value = `lat: ${startCoordinate.lat.toFixed(5)}, lng: ${startCoordinate.lng.toFixed(5)}`;
 
     const successMessage = getSuccessMessage();
-    onEscapeKeyDown(() => hide(successMessage));
-    onEscapeKeyDown(() => enable(publicationButton));
-    onAnyClick(() => hide(successMessage));
-    onAnyClick(() => enable(publicationButton));
+    addEscapeKeyDownOnlyOneslistener(() => hide(successMessage));
+    addEscapeKeyDownOnlyOneslistener(() => enable(publicationButton));
+    addAnyClickOnlyOnesListener(() => hide(successMessage));
+    addAnyClickOnlyOnesListener(() => enable(publicationButton));
   };
 
   form.addEventListener('submit', (evt) => {

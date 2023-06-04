@@ -9,3 +9,26 @@ export const MIN_PRICE_PER_NIGHT = {
   'house': 5000,
   'palace': 10000,
 };
+
+export const NOT_FOR_GUESTS_ROOM_NUMBER = 100;
+
+export const PRICE = {
+  LOW: 10000,
+  HIGH: 50000,
+};
+
+export const ANY = 'any';
+
+export const PRICE_FILTER = {
+  LOW: 'low',
+  HIGH: 'hogh',
+  MIDDLE: 'middle',
+  ANY: 'any'
+};
+
+export const ZOOM = 10;
+
+export const MAIN_PIN_MARKER_START_POSITION = {
+  lat: 35.68950,
+  lng: 139.69200,
+};

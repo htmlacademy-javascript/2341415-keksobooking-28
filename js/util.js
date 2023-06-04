@@ -1,18 +1,14 @@
-const positiveIntToString = (n) => n < 10 ? `0${n.toString()}` : n.toString();
-
-const unique = (arr) => {
-  const result = [];
+const getUnique = (arr) => {
+  const uniqueValues = [];
 
   for (const it of arr) {
-    if (!result.includes(it)) {
-      result.push(it);
+    if (!uniqueValues.includes(it)) {
+      uniqueValues.push(it);
     }
   }
 
-  return result;
+  return uniqueValues;
 };
-
-const createArray = (length, fn) => Array.from({ length }, fn);
 
 const debounce = (callback, timeoutDelay) => {
   let timeoutId;
@@ -33,4 +29,4 @@ const enable = (el) => {
   el.disabled = false;
 };
 
-export { positiveIntToString, unique, createArray, debounce, hide, show, disable, enable };
+export { getUnique, debounce, hide, show, disable, enable };

@@ -13,13 +13,10 @@ const slider = noUiSlider.create(sliderElement, {
   step: 1,
   connect: 'lower',
   format: {
-    to: function (value) {
-      if (value.isInteger) {
-        return value.toFixed(0);
-      }
-      return value.toFixed(0);
+    to(value) {
+      return value.isInteger ? value.toFixed(0) : value.toFixed(0);
     },
-    from: function (value) {
+    from(value) {
       return parseFloat(value);
     },
   },
@@ -32,7 +29,9 @@ typeEl.addEventListener('change', (evt) => {
 
 slider.on(
   'update',
-  () => (priceElement.value = sliderElement.noUiSlider.get())
+  () => {
+    priceElement.value = sliderElement.noUiSlider.get();
+  }
 );
 
 priceElement.addEventListener(
