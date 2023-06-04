@@ -1,15 +1,8 @@
+import { MIN_PRICE_PER_NIGHT } from './config.js';
+
 const sliderElement = document.querySelector('.ad-form__slider');
 const priceElement = document.querySelector('[name="price"]');
 const typeEl = document.querySelector('#type');
-
-
-const minPricePerNight = { // TODO import from module
-  'bungalow': 0,
-  'flat': 1000,
-  'hotel': 3000,
-  'house': 5000,
-  'palace': 10000,
-};
 
 const slider = noUiSlider.create(sliderElement, {
   range: {
@@ -33,7 +26,7 @@ const slider = noUiSlider.create(sliderElement, {
 });
 
 typeEl.addEventListener('change', (evt) => {
-  slider.updateOptions({ range: { min: minPricePerNight[evt.target.value], max: 100000 } });
+  slider.updateOptions({ range: { min: MIN_PRICE_PER_NIGHT[evt.target.value], max: 100000 } });
   return evt.target.value;
 });
 

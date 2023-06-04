@@ -1,8 +1,6 @@
 import { TYPES } from './templates.js';
 import { createFeatureFragment } from './templates.js';
-
-
-const hide = (el) => el.classList.add('hidden');
+import { hide } from './util.js';
 
 const clean = (el) => {
   el.innerHTML = '';
